@@ -43,7 +43,7 @@ function showRandomQuote() {
 }
 
 // ---- Step 3: Function to add new quote ----
-function addQuote() {
+function createAddQuoteForm() {
   const text = newQuoteText.value.trim();
   const category = newQuoteCategory.value.trim();
 
@@ -67,4 +67,4 @@ function addQuote() {
 
 // ---- Step 4: Add event listeners ----
 newQuoteBtn.addEventListener('click', showRandomQuote);
-addQuoteBtn.addEventListener('click', addQuote);
+addQuoteBtn.addEventListener('click', createAddQuoteForm);
