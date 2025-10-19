@@ -190,7 +190,7 @@ async function syncQuotes() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(quotes)
     });
-    updateSyncStatus("✅ Synced with server", "green");
+    updateSyncStatus("✅ Quotes synced with server!", "green");
   } catch (error) {
     console.error("Server sync failed:", error);
     updateSyncStatus("⚠️ Failed to sync", "red");
