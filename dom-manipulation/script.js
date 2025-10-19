@@ -164,7 +164,7 @@ if (savedCategory) {
 const SERVER_URL = 'https://jsonplaceholder.typicode.com/posts';
 
 // Fetch quotes from “server” (simulated)
-async function fetchFromServer() {
+async function fetchQuotesFromServer() {
   try {
     const res = await fetch(SERVER_URL);
     const serverData = await res.json();
@@ -233,5 +233,5 @@ function updateSyncStatus(message, color = "black") {
 
 // ---- Periodic Sync ---- //
 setInterval(() => {
-  fetchFromServer();
+  fetchQuotesFromServer();
 }, 30000); // every 30 seconds
