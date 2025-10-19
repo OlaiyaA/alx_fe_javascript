@@ -6,6 +6,7 @@
     const newQuoteCategory = document.getElementById('newQuoteCategory');
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
+    const categoryFilter = document.getElementById('categoryFilter');
 
     // ---- Step 2: Load from localStorage if exists ----
     let quotes = JSON.parse(localStorage.getItem('quotes')) || [
@@ -20,24 +21,126 @@
       localStorage.setItem('quotes', JSON.stringify(quotes));
     }
 
-    // ---- Step 4: Show random quote ----
-    function showRandomQuote() {
-      if (quotes.length === 0) {
-        quoteDisplay.textContent = "No quotes available yet. Add one!";
-        return;
-      }
-
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      const randomQuote = quotes[randomIndex];
-
-      // store last viewed quote in sessionStorage
-      sessionStorage.setItem('lastViewedQuote', JSON.stringify(randomQuote));
-
-      quoteDisplay.innerHTML = `
-        <p>"${randomQuote.text}"</p>
-        <span style="color:#2563eb; display:block; margin-top:8px;">— ${randomQuote.category}</span>
-      `;
+    // ---- Populate category dropdown ----
+    function populateCategories() {
+      const uniqueCategories = [...new Set(quotes.map(q => q.category))];
+      categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+      uniqueCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
     }
+
+    // // ---- Display quotes ----
+    // function displayQuotes(quoteList) {
+    //   quoteDisplay.innerHTML = '';
+    //   if (quoteList.length === 0) {
+    //     quoteDisplay.textContent = "No quotes available for this category.";
+    //     return;
+    //   }
+
+    //   quoteList.forEach(q => {
+    //     const div = document.createElement('div');
+    //     div.innerHTML = `
+    //       <p>"${q.text}"</p>
+    //       <span style="color:#2563eb;">— ${q.category}</span>
+    //       <hr>
+    //     `;
+    //     quoteDisplay.appendChild(div);
+    //   });
+    // }
+
+    // ---- Filter quotes ----
+    
+    // ---- Filter quotes based on selected category and show one random ----
+    function filterQuotes() {
+        const selectedCategory = categoryFilter.value;
+        localStorage.setItem('selectedCategory', selectedCategory);
+
+        // Filter quotes by category (or show all)
+        let filteredQuotes = selectedCategory === 'all'
+            ? quotes
+            : quotes.filter(q => q.category === selectedCategory);
+
+        // If there are no quotes in that category
+        if (filteredQuotes.length === 0) {
+            quoteDisplay.textContent = "No quotes available in this category.";
+            return;
+        }
+
+        // Pick a random one from the filtered quotes
+        const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+        const randomQuote = filteredQuotes[randomIndex];
+
+        // Display the random quote
+        quoteDisplay.innerHTML = `
+            <p>"${randomQuote.text}"</p>
+            <span style="color:#2563eb;">— ${randomQuote.category}</span>
+        `;
+
+        // Save to sessionStorage as the last viewed quote
+        sessionStorage.setItem('lastViewedQuote', JSON.stringify(randomQuote));
+    }
+
+        // ---- Show truly random quote (ignoring filter) ----
+    function showRandomQuote() {
+        const selectedCategory = categoryFilter.value;
+
+        // If a specific category is selected, use that filter
+        if (selectedCategory !== 'all') {
+            filterQuotes();
+            return;
+        }
+
+        // Otherwise, pick any random quote from all
+        if (quotes.length === 0) {
+            quoteDisplay.textContent = "No quotes available yet. Add one!";
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const randomQuote = quotes[randomIndex];
+
+        quoteDisplay.innerHTML = `
+            <p>"${randomQuote.text}"</p>
+            <span style="color:#2563eb;">— ${randomQuote.category}</span>
+        `;
+        sessionStorage.setItem('lastViewedQuote', JSON.stringify(randomQuote));
+    }
+
+    
+    // function filterQuotes() {
+    //   const selectedCategory = categoryFilter.value;
+    //   localStorage.setItem('selectedCategory', selectedCategory);
+
+    //   const filtered = selectedCategory === 'all'
+    //     ? quotes
+    //     : quotes.filter(q => q.category === selectedCategory);
+
+    //   displayQuotes(filtered);
+    // }
+
+
+    // // ---- Step 4: Show random quote ----
+    // function showRandomQuote() {
+    //   if (quotes.length === 0) {
+    //     quoteDisplay.textContent = "No quotes available yet. Add one!";
+    //     return;
+    //   }
+
+    //   const randomIndex = Math.floor(Math.random() * quotes.length);
+    //   const randomQuote = quotes[randomIndex];
+
+    //   // store last viewed quote in sessionStorage
+    //   sessionStorage.setItem('lastViewedQuote', JSON.stringify(randomQuote));
+
+    //   quoteDisplay.innerHTML = `
+    //     <p>"${randomQuote.text}"</p>
+    //     <span style="color:#2563eb; display:block; margin-top:8px;">— ${randomQuote.category}</span>
+    //   `;
+    // }
 
     // ---- Step 5: Add new quote ----
     function createAddQuoteForm() {
@@ -106,4 +209,16 @@
       `;
     } else {
       showRandomQuote();
+    }
+
+
+// ---- On load ----
+    populateCategories();
+
+    const savedCategory = localStorage.getItem('selectedCategory');
+    if (savedCategory) {
+      categoryFilter.value = savedCategory;
+      filterQuotes();
+    } else {
+      displayQuotes(quotes);
     }
