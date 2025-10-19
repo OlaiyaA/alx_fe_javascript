@@ -1,4 +1,73 @@
-        // ---- Step 1: Setup ----*//
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Quote Generator with Storage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    #quoteDisplay {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #1e3a8a;
+    }
+
+    input, textarea {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    #importFile {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dynamic Quote Generator</h1>
+
+  <div id="quoteDisplay"></div>
+
+  <button id="newQuote">Show Random Quote</button>
+
+  <h3>Add a New Quote</h3>
+  <textarea id="newQuoteText" placeholder="Enter your quote"></textarea>
+  <input type="text" id="newQuoteCategory" placeholder="Category (e.g. Motivation)" />
+  <button id="addQuoteBtn">Add Quote</button>
+
+  <h3>Import/Export Quotes</h3>
+  <button id="exportBtn">Export as JSON</button>
+  <input type="file" id="importFile" accept=".json" />
+
+  <script>
+    // ---- Step 1: Setup ----
     const quoteDisplay = document.getElementById('quoteDisplay');
     const newQuoteBtn = document.getElementById('newQuote');
     const addQuoteBtn = document.getElementById('addQuoteBtn');
@@ -107,3 +176,6 @@
     } else {
       showRandomQuote();
     }
+  </script>
+</body>
+</html>
