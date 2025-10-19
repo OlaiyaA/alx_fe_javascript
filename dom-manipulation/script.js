@@ -99,7 +99,7 @@ function createAddQuoteForm() {
 
   alert('New quote added successfully!');
   showRandomQuote();
-  syncToServer(); // push new data to “server” on add
+  syncQuotes(); // push new data to “server” on add
 }
 
 // ---- Export ---- //
@@ -183,7 +183,7 @@ async function fetchQuotesFromServer() {
 }
 
 // Push local quotes to “server” (simulated)
-async function syncToServer() {
+async function syncQuotes() {
   try {
     await fetch(SERVER_URL, {
       method: 'POST',
